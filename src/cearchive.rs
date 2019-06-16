@@ -69,21 +69,4 @@ impl CEArchive{
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
 
-    const TEST_ARCHIVE: &[u8] = include_bytes!("/home/jan/ARCHIVE");
-
-    #[test]
-    fn filecount() {
-        let archive = CEArchive::new(&TEST_ARCHIVE).unwrap();
-        assert_eq!(archive.filecount, 5)
-    }
-
-    #[test]
-    fn contains() {
-        let archive = CEArchive::new(&TEST_ARCHIVE).unwrap();
-        assert!(archive.files.iter().find(|f| "CET_TRAINER.CETRAINER" == f.name.as_str()).is_some());
-    }
-}
