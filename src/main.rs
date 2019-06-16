@@ -105,7 +105,8 @@ fn run(filename: &str) -> Result<(), UnpackError> {
 
     let out_path = Path::new(out_filename.as_str());
     let mut out_file = File::create(&out_path)?;
-    out_file.write_all(&raw_trainer)?;
+    // TODO: find out why there's 4 byte of garbage at the beginning
+    out_file.write_all(&raw_trainer[4..])?;
 
     Ok(())
 }
