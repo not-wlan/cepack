@@ -2,11 +2,17 @@
 name = "cepack"
 version = "0.1.0"
 authors = ["jan"]
-edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+edition             = "2018"
+format_macro_bodies = true
+format_strings      = true
+merge_imports       = true
+reorder_impl_items  = true
+reorder_imports     = true
+reorder_modules     = true
+wrap_comments       = true
 
 [dependencies]
-pelite = "0.7.1"
+pelite = { git = "https://github.com/CasualX/pelite" }
 inflate = "*"
 quick-error = "1.2.2"
+byteorder = "*"
