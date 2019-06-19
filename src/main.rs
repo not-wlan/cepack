@@ -22,9 +22,9 @@ use std::str;
 static TRAINER_MAGIC: &str = "CHEAT";
 static TRAINER_FILE: &str = "CET_TRAINER.CETRAINER";
 
-/// "ARCHIVE" in 16 Bit wide chars
+/// "ARCHIVE" is the name of either the compressed trainer or the Archive containing the trainer
 const ARCHIVE_NAME: &str = "ARCHIVE";
-/// "DECOMPRESSOR" in 16 Bit wide chars
+/// "DECOMPRESSOR" is the name of a DEFLATE Decompressor shipped with the large variety of trainer  
 const DECOMPRESSSOR_NAME: &str = "DECOMPRESSOR";
 /// ID of the resource type RCDATA ( https://docs.microsoft.com/en-us/windows/desktop/menurc/resource-types )
 const RT_RCDATA: Name = Name::Id(10);
