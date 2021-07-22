@@ -1,6 +1,5 @@
 use inflate::inflate_bytes;
-use std::convert::TryInto;
-use std::str;
+use std::{convert::TryInto, str};
 
 use crate::errors::UnpackError;
 
