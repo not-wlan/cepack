@@ -5,26 +5,25 @@ mod errors;
 extern crate quick_error;
 extern crate byteorder;
 
-use crate::cearchive::CEArchive;
-use crate::errors::UnpackError;
+use crate::{cearchive::CEArchive, errors::UnpackError};
 
-use pelite::pe32::{Pe, PeFile};
-use pelite::resources::*;
-use pelite::FileMap;
+use pelite::{
+    pe32::{Pe, PeFile},
+    resources::*,
+    FileMap,
+};
 
-use std::env;
-use std::fs::File;
-use std::io::Write;
-use std::path::Path;
-use std::str;
+use std::{env, fs::File, io::Write, path::Path, str};
 
 /// The magic bytes used by CE Trainers
 static TRAINER_MAGIC: &str = "CHEAT";
 static TRAINER_FILE: &str = "CET_TRAINER.CETRAINER";
 
-/// "ARCHIVE" is the name of either the compressed trainer or the Archive containing the trainer
+/// "ARCHIVE" is the name of either the compressed trainer or the Archive
+/// containing the trainer
 const ARCHIVE_NAME: &str = "ARCHIVE";
-/// "DECOMPRESSOR" is the name of a DEFLATE Decompressor shipped with the large variety of trainer  
+/// "DECOMPRESSOR" is the name of a DEFLATE Decompressor shipped with the large
+/// variety of trainer
 const DECOMPRESSSOR_NAME: &str = "DECOMPRESSOR";
 /// ID of the resource type RCDATA ( https://docs.microsoft.com/en-us/windows/desktop/menurc/resource-types )
 const RT_RCDATA: Name = Name::Id(10);
@@ -52,18 +51,18 @@ fn run(filename: &str) -> Result<(), UnpackError> {
 
     println!("[+] attempting to unpack \"{}\"", filename);
 
-    // If a "DECOMPRESSOR" Resource isn't present the tiny mode was used. That means that the trainer can be unpacked as is.
-    let archive_resource = resources.find_resource(RT_RCDATA, Name::from(ARCHIVE_NAME))?;
-    let mut data  = match resources.find_resource(RT_RCDATA, Name::from(DECOMPRESSSOR_NAME)) {
-        Ok(_) => {
-            CEArchive::new(archive_resource)?
-                .files
-                .iter()
-                .find(|f| f.name.as_str() == TRAINER_FILE)
-                .ok_or(UnpackError::InvalidArchive)?
-                .data
-                .clone()
-        },
+    // If a "DECOMPRESSOR" Resource isn't present the tiny mode was used. That means
+    // that the trainer can be unpacked as is.
+
+    let archive_resource = resources.find_resource(&[RT_RCDATA, Name::Str(ARCHIVE_NAME)])?;
+    let mut data = match resources.find_resource(&[RT_RCDATA, Name::from(DECOMPRESSSOR_NAME)]) {
+        Ok(_) => CEArchive::new(archive_resource)?
+            .files
+            .iter()
+            .find(|f| f.name.as_str() == TRAINER_FILE)
+            .ok_or(UnpackError::InvalidArchive)?
+            .data
+            .clone(),
         Err(_) => archive_resource.to_vec(),
     };
 
